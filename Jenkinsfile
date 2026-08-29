@@ -13,16 +13,31 @@ pipeline {
                     echo "Testing from github...."
                 }
             }
+            
+            stage("Test"){
+                steps{
+                    sh '''
+                    chmod +x ./mvnw
+                    ./mvnw test
+                    '''
+                }
+            }
 
-            stage("Welcome stage") {
-                 steps { 
+            stage("Build"){
+                steps{
                     sh '''
-                    echo "Hello pipeline for ${PROJECT_NAME} started..." 
+                    ./mvnw clean package -DskipTests
                     '''
+                }
+            }
+
+            stage("Docker Build"){
+                steps{
                     sh '''
-                    echo "Build number: ${BUILD_NUMBER}" 
+                    docker build \
+                    -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                     '''
-                } 
-            } 
+                }
+            }
         } 
 }
