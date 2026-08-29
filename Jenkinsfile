@@ -10,7 +10,7 @@ pipeline {
                 steps{
                     checkout scm
                     echo "checkout successful"
-                    echo "Testing from github..."
+                    echo "Testing from github...."
                 }
             }
 
