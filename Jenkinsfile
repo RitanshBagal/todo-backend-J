@@ -13,11 +13,11 @@ pipeline {
                     echo "Testing from github..."
                 }
             }
-            
+
             stage("Welcome stage") {
                  steps { 
                     echo "Hello pipeline for ${PROJECT_NAME} started..." 
-                    echo "Build number: ${BUILD_NUMBER}" 
+                    echo "Build number is ${BUILD_NUMBER}" 
                 } 
             } 
         } 
