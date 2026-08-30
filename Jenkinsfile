@@ -45,8 +45,8 @@ pipeline {
                 ]){
                     sh '''
 
-                    echo "$DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin"
-                    docker push ${DOCKER_IMAGE}:${dOCKER_TAG}
+                    echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+                    docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
                     docker image prune -af
                     docker images
                     '''
