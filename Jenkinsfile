@@ -33,5 +33,25 @@ pipeline {
                 sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
             }
         }
+        stage("Docker Push"){
+            steps{
+
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-credentials',
+                        usernameVariable: 'DOCKERHUB_USERNAME',
+                        passwordVariable: 'DOCKERHUB_PASSWORD'
+                    )
+                ]){
+                    sh '''
+
+                    echo "$DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin"
+                    docker push ${DOCKER_IMAGE}:${dOCKER_TAG}
+                    docker image prune -af
+                    docker images
+                    '''
+                }
+            }
+        }
     }
 }
