@@ -22,7 +22,9 @@ public class RootController {
         response.put("timestamp", LocalDateTime.now().toString());
 
         Map<String, String> endpoints = new LinkedHashMap<>();
-        endpoints.put("GET /", "Root API status check");
+        endpoints.put("GET /", "Web Application Dashboard");
+        endpoints.put("GET /about", "About & Architecture Page");
+        endpoints.put("GET /api", "Root API status and endpoints directory");
         endpoints.put("GET /api/todos", "Get all todos (supports ?completed=true|false and ?search=text)");
         endpoints.put("GET /api/todos/{id}", "Get todo by ID");
         endpoints.put("POST /api/todos", "Create a new todo");

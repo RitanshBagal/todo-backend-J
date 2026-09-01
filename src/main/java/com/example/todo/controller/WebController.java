@@ -19,4 +19,10 @@ public class WebController {
         model.addAttribute("todos", todoService.getAllTodos(null, null));
         return "index";
     }
+
+    @GetMapping("/about")
+    public String about(Model model) {
+        model.addAttribute("totalCount", todoService.getAllTodos(null, null).size());
+        return "about";
+    }
 }

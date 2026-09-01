@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +33,13 @@ class WebControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(webController).build();
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/templates/");
+        viewResolver.setSuffix(".html");
+
+        mockMvc = MockMvcBuilders.standaloneSetup(webController)
+                .setViewResolvers(viewResolver)
+                .build();
     }
 
     @Test
@@ -43,5 +51,16 @@ class WebControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"))
                 .andExpect(model().attributeExists("todos"));
+    }
+
+    @Test
+    void getAboutPage_shouldReturnAboutViewAndModel() throws Exception {
+        Todo todo = new Todo(1L, "Sample Task", "Sample Desc", false, LocalDateTime.now(), LocalDateTime.now());
+        when(todoService.getAllTodos(null, null)).thenReturn(List.of(todo));
+
+        mockMvc.perform(get("/about"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("about"))
+                .andExpect(model().attributeExists("totalCount"));
     }
 }

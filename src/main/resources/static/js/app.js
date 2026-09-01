@@ -223,7 +223,15 @@
             </button>
         `;
 
-        elements.toastContainer.appendChild(toast);
+        let container = elements.toastContainer || document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none';
+            document.body.appendChild(container);
+            elements.toastContainer = container;
+        }
+        container.appendChild(toast);
 
         // Animate in
         requestAnimationFrame(() => {
@@ -589,27 +597,33 @@
     }
 
     // Bind Event Listeners
-    elements.confirmDeleteBtn.addEventListener('click', () => {
-        if (typeof state.pendingDeleteAction === 'function') {
-            state.pendingDeleteAction();
-        }
-    });
+    if (elements.confirmDeleteBtn) {
+        elements.confirmDeleteBtn.addEventListener('click', () => {
+            if (typeof state.pendingDeleteAction === 'function') {
+                state.pendingDeleteAction();
+            }
+        });
+    }
 
     // Close modals on Escape key
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeEditModal();
-            closeDeleteModal();
+            if (elements.editModal) closeEditModal();
+            if (elements.deleteModal) closeDeleteModal();
         }
     });
 
     // Close modal when clicking outside backdrop
-    elements.editModal.addEventListener('click', (e) => {
-        if (e.target === elements.editModal) closeEditModal();
-    });
-    elements.deleteModal.addEventListener('click', (e) => {
-        if (e.target === elements.deleteModal) closeDeleteModal();
-    });
+    if (elements.editModal) {
+        elements.editModal.addEventListener('click', (e) => {
+            if (e.target === elements.editModal) closeEditModal();
+        });
+    }
+    if (elements.deleteModal) {
+        elements.deleteModal.addEventListener('click', (e) => {
+            if (e.target === elements.deleteModal) closeDeleteModal();
+        });
+    }
 
     // Expose app methods to global scope for HTML inline handlers
     window.app = {
@@ -625,12 +639,15 @@
         closeDeleteModal,
         setFilter,
         handleSearch,
-        clearSearch
+        clearSearch,
+        showToast
     };
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
         initTheme();
-        loadTodos();
+        if (elements.todoListContainer) {
+            loadTodos();
+        }
     });
 })();
