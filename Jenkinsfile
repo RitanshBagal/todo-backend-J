@@ -7,7 +7,7 @@ pipeline {
         PROJECT_NAME     = "todo-backend"
         DOCKER_IMAGE     = "ritanshbagal/todo-backend"
         DOCKER_TAG       = "${BUILD_NUMBER}"
-        EC2_HOST         = "3.110.55.59"
+        EC2_HOST         = "43.204.69.34"
         EC2_USER         = "ubuntu"
         DOCKER_CONTAINER = "todo-backend"
         APP_PORT         = "8082:8080"
